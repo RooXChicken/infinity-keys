@@ -1,0 +1,33 @@
+{
+	"schemaVersion": 1,
+	"id": "infinity-keys",
+	"version": "${version}",
+	"name": "Infinity Keys",
+	"description": "Mod that enables the use of keybinds and the skill tree in the Infinity SMP",
+	"authors": [
+		"RooXChicken"
+	],
+	"license": "CC0-1.0",
+	"icon": "assets/infinity-keys/icon.png",
+	"environment": "*",
+	"entrypoints": {
+		"main": [
+			"com.rooxchicken.InfinityKeys"
+		],
+		"client": [
+			"com.rooxchicken.client.InfinityKeysClient"
+		]
+	},
+	"mixins": [
+		"infinity-keys.mixins.json"
+	],
+	"depends": {
+		"fabricloader": ">=0.15.11",
+		"minecraft": "~1.20.1",
+		"java": ">=17",
+		"fabric-api": "*"
+	},
+	"suggests": {
+		"another-mod": "*"
+	}
+}
