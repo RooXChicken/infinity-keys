@@ -12,9 +12,11 @@ public class Node
     public boolean render;
     public boolean unlocked;
 
+    public int clickAction;
+
     public Node() {}
 
-    public Node(Identifier _texture, double _positionX, double _positionY, String _description, boolean _render, boolean _unlocked)
+    public Node(Identifier _texture, double _positionX, double _positionY, String _description, boolean _render, boolean _unlocked, int _clickAction)
     {
         texture = _texture;
         positionX = _positionX;
@@ -24,5 +26,7 @@ public class Node
         render = _render;
 
         unlocked = _unlocked;
+        
+        clickAction = _clickAction;
     }
 }

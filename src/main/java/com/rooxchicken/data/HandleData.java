@@ -44,7 +44,7 @@ public class HandleData
             case 2:
                 if(data[2].equals("srt"))
                 {
-                    currentTree = new SkillTree(data[3], Float.parseFloat(data[4]), Float.parseFloat(data[5]), Float.parseFloat(data[6]));
+                    currentTree = new SkillTree(data[3], Integer.parseInt(data[4]), Float.parseFloat(data[5]), Float.parseFloat(data[6]), Float.parseFloat(data[7]), Boolean.parseBoolean(data[8]), Double.parseDouble(data[9]));
                     return;
                 }
 
@@ -65,6 +65,8 @@ public class HandleData
 
                 node.render = Boolean.parseBoolean(data[6]);
                 node.unlocked = Boolean.parseBoolean(data[7]);
+
+                node.clickAction = Integer.parseInt(data[8]);
 
                 currentTree.nodes.add(node);
             break;

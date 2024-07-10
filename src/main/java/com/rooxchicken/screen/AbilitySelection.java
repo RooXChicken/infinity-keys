@@ -69,6 +69,7 @@ public class AbilitySelection extends Screen
     public AbilitySelection(Text title, SkillTree _tree)
     {
         super(title);
+
         tree = _tree;
     }
 
@@ -84,8 +85,11 @@ public class AbilitySelection extends Screen
         oldWW = width/2;
         oldWH = height/2;
 
-        smoothX = oldWW;
-        smoothY = oldWH;
+        smoothX = -width/2 + 8;
+        smoothY = -height/2 + 8;
+
+        scale = tree.defaultScale;
+        smoothScale = tree.defaultScale*3;
 	}
 	 
 	@Override
@@ -102,24 +106,13 @@ public class AbilitySelection extends Screen
         if(clickAction != -1)
         {
             client.world.playSound(client.player, client.player.getBlockPos(), SoundEvents.UI_BUTTON_CLICK.value(), SoundCategory.MASTER, 0.6f, 1f);
-            switch(clickAction)
-            {
-                case 0:
-                    client.world.playSound(client.player, client.player.getBlockPos(), SoundEvents.BLOCK_BEACON_POWER_SELECT, SoundCategory.MASTER, 0.6f, 1f);
-                break;
-                case 1:
-                    
-                break;
-                case 2:
-                    
-                break;
-            }
+            InfinityKeysClient.sendChatCommand("hdn_unlock " + tree.index + " " + clickAction);
         }
         else
         {
             dragging = true;
-            oldMouseX = mouseX - smoothX;
-            oldMouseY = mouseY - smoothY;
+            oldMouseX = mouseX;
+            oldMouseY = mouseY;
         }
 
         return super.mouseClicked(mouseX, mouseY, button);
@@ -141,12 +134,13 @@ public class AbilitySelection extends Screen
     	scale += InfinityKeysClient.scrolls/8.0;
         InfinityKeysClient.scrolls = 0;
 
-        double smooth = 1;
+        double smooth = 0.8;
         if(scale < smoothScale)
         {
             double prog = (scale/smoothScale)*smooth;
             if(prog > 0.98)
                 prog = 1;
+            InfinityKeys.LOGGER.info(prog + "");
             smoothScale = lerp(scale, smoothScale, prog);
         }
         if(scale > smoothScale)
@@ -154,29 +148,36 @@ public class AbilitySelection extends Screen
             double prog = (smoothScale/scale)*smooth;
             if(prog > 0.98)
                 prog = 1;
+            InfinityKeys.LOGGER.info(prog + "");
             smoothScale = lerp(scale, smoothScale, prog);
         }
 
         if(dragging)
         {
-            smoothX = mouseX - oldMouseX;
-            smoothY = mouseY - oldMouseY;
+            smoothX += (mouseX - oldMouseX)/smoothScale;
+            smoothY += (mouseY - oldMouseY)/smoothScale;
+
+            oldMouseX = mouseX;
+            oldMouseY = mouseY;
         }
 
-        if(scale < 0.1)
-            scale = 0.1;
-        if(smoothScale < 0.1)
-            smoothScale = 0.1;
+        if(scale < 0.4)
+            scale = 0.4;
+        if(smoothScale < 0.4)
+            smoothScale = 0.4;
 
-        offsetX = smoothX/smoothScale - width/2 - (16/2*smoothScale);
-        offsetY = smoothY/smoothScale - height/2 - (16/2*smoothScale);
+        offsetX = width/smoothScale/2 + smoothX - 16;
+        offsetY = height/smoothScale/2 + smoothY - 16;
     }
     
     @Override
     public boolean keyPressed(int keyCode, int scanCode, int modifiers) {
         if (keyCode == GLFW.GLFW_KEY_ESCAPE)
         {
-            close();
+            if(tree.index == 0)
+                close();
+            else
+                InfinityKeysClient.sendChatCommand("skilltree");
             return true;
         }
         return super.keyPressed(keyCode, scanCode, modifiers);
@@ -210,7 +211,7 @@ public class AbilitySelection extends Screen
             GlStateManager._enableBlend();
             GlStateManager._disableDepthTest();
 
-            if(prevNode != null)
+            if(tree.nodesConnected && prevNode != null)
             {
                 int nodeScale = 8;
                 if(node.positionX != prevNode.positionX)
@@ -225,7 +226,7 @@ public class AbilitySelection extends Screen
                 if(screenX > node.positionX && screenX < (node.positionX + 16) && screenY > node.positionY && screenY < (node.positionY+16))
                 {
                     setTooltip(Text.of(node.description));
-                    clickAction = i;
+                    clickAction = node.clickAction;
 
                     RenderSystem.setShaderColor(tree.r*0.6f, tree.g*0.6f, tree.b*0.6f, 1);
                 }
