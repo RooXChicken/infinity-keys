@@ -12,6 +12,10 @@ public class HandleData
 {
     private static SkillTree currentTree;
 
+    public static double smoothX;
+    public static double smoothY;
+    public static double smoothScale;
+
     public static void parseData(String msg)
     {
         String[] data = msg.split("_");
@@ -50,7 +54,7 @@ public class HandleData
 
                 Node node = new Node();
 
-                if(data[2].equals("n"))
+                if(data[2].equals("n") || data[2].equals("l"))
                     node.texture = null;
                 else
                     node.texture = Identifier.of("infinity-keys", "textures/gui/" + data[2] + ".png");
@@ -58,23 +62,27 @@ public class HandleData
                 node.positionX = Integer.parseInt(data[3]);
                 node.positionY = Integer.parseInt(data[4]);
 
-                if(data[5].equals("n"))
+                if(data[5].equals("n") || data[5].equals("l"))
                     node.description = "";
                 else
                     node.description = data[5];
 
                 node.render = Boolean.parseBoolean(data[6]);
                 node.unlocked = Boolean.parseBoolean(data[7]);
+                node.locked = Boolean.parseBoolean(data[8]);
 
-                node.clickAction = Integer.parseInt(data[8]);
+                node.clickAction = Integer.parseInt(data[9]);
 
                 currentTree.nodes.add(node);
             break;
             case 3:
                 InfinityKeysClient.playerAbility = -2;
                 InfinityKeysClient.abilityData = new AbilityData("empty");
+
+                currentTree.points = Integer.parseInt(data[2]);
+
                 MinecraftClient client = MinecraftClient.getInstance();
-                client.setScreen(new AbilitySelection(Text.of("Ability Selection"), currentTree));
+                client.setScreen(new AbilitySelection(Text.of("Ability Selection"), currentTree, Boolean.parseBoolean(data[3])));
             break;
         }
     }

@@ -12,6 +12,8 @@ public class SkillTree
     public boolean nodesConnected;
     public double defaultScale;
 
+    public int points = 0;
+
     public ArrayList<Node> nodes;
 
     public SkillTree(String _name, int _index, float _r, float _g, float _b, boolean connected, double _defaultScale)

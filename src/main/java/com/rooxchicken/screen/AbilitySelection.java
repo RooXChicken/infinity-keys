@@ -11,6 +11,7 @@ import com.rooxchicken.InfinityKeys;
 import com.rooxchicken.client.InfinityKeysClient;
 import com.rooxchicken.data.AbilityData;
 import com.rooxchicken.data.AbilityDesc;
+import com.rooxchicken.data.HandleData;
 import com.rooxchicken.data.Node;
 import com.rooxchicken.data.SkillTree;
 import com.rooxchicken.mixin.MixinScrolls;
@@ -43,7 +44,7 @@ public class AbilitySelection extends Screen
 {
     private SkillTree tree;
     private int mouseStatus = -2;
-    private int clickAction = -1;
+    private Node selectedNode = null;
 
     private double smoothScale = 3;
     private double scale = 1;
@@ -63,13 +64,17 @@ public class AbilitySelection extends Screen
     private int oldWW = 0;
     private int oldWH = 0;
 
+    private boolean resetZoom;
+
     private boolean dragging = false;
     private Identifier frameTex = Identifier.of("infinity-keys", "textures/gui/frame.png");
+    private Identifier lockTex = Identifier.of("infinity-keys", "textures/gui/icons/37.png");
 
-    public AbilitySelection(Text title, SkillTree _tree)
+    public AbilitySelection(Text title, SkillTree _tree, boolean _resetZoom)
     {
         super(title);
 
+        resetZoom = _resetZoom;
         tree = _tree;
     }
 
@@ -85,11 +90,16 @@ public class AbilitySelection extends Screen
         oldWW = width/2;
         oldWH = height/2;
 
-        smoothX = -width/2 + 8;
-        smoothY = -height/2 + 8;
+        if(resetZoom)
+        {
+            HandleData.smoothX = -width/2 + 8;
+            HandleData.smoothY = -height/2 + 8;
 
-        scale = tree.defaultScale;
-        smoothScale = tree.defaultScale*3;
+            scale = tree.defaultScale;
+            HandleData.smoothScale = tree.defaultScale*3;
+        }
+        else
+            scale = HandleData.smoothScale;
 	}
 	 
 	@Override
@@ -103,10 +113,14 @@ public class AbilitySelection extends Screen
     {
     	mouseStatus = button;
 
-        if(clickAction != -1)
+        if(selectedNode != null && selectedNode.clickAction != -1)
         {
-            client.world.playSound(client.player, client.player.getBlockPos(), SoundEvents.UI_BUTTON_CLICK.value(), SoundCategory.MASTER, 0.6f, 1f);
-            InfinityKeysClient.sendChatCommand("hdn_unlock " + tree.index + " " + clickAction);
+            if(!selectedNode.locked)
+                client.world.playSound(client.player, client.player.getBlockPos(), SoundEvents.UI_BUTTON_CLICK.value(), SoundCategory.MASTER, 0.6f, 1f);
+            else
+                client.world.playSound(client.player, client.player.getBlockPos(), SoundEvents.BLOCK_CHAIN_HIT, SoundCategory.MASTER, 0.6f, 1f);
+
+            InfinityKeysClient.sendChatCommand("hdn_action " + tree.index + " " + selectedNode.clickAction + " " + button);
         }
         else
         {
@@ -129,18 +143,21 @@ public class AbilitySelection extends Screen
     
     public void doTick()
     {
+        smoothScale = HandleData.smoothScale;
+        smoothX = HandleData.smoothX;
+        smoothY = HandleData.smoothY;
+
         double scalingFactor = client.getWindow().getScaleFactor();
 
     	scale += InfinityKeysClient.scrolls/8.0;
         InfinityKeysClient.scrolls = 0;
 
-        double smooth = 0.8;
+        double smooth = 1;
         if(scale < smoothScale)
         {
             double prog = (scale/smoothScale)*smooth;
             if(prog > 0.98)
                 prog = 1;
-            InfinityKeys.LOGGER.info(prog + "");
             smoothScale = lerp(scale, smoothScale, prog);
         }
         if(scale > smoothScale)
@@ -148,7 +165,6 @@ public class AbilitySelection extends Screen
             double prog = (smoothScale/scale)*smooth;
             if(prog > 0.98)
                 prog = 1;
-            InfinityKeys.LOGGER.info(prog + "");
             smoothScale = lerp(scale, smoothScale, prog);
         }
 
@@ -168,6 +184,10 @@ public class AbilitySelection extends Screen
 
         offsetX = width/smoothScale/2 + smoothX - 16;
         offsetY = height/smoothScale/2 + smoothY - 16;
+
+        HandleData.smoothScale = smoothScale;
+        HandleData.smoothX = smoothX;
+        HandleData.smoothY = smoothY;
     }
     
     @Override
@@ -196,10 +216,10 @@ public class AbilitySelection extends Screen
         double screenX = mouseX/smoothScale - offsetX + 1;
         double screenY = mouseY/smoothScale - offsetY + 1;
 
-        clickAction = -1;
+        selectedNode = null;
 		
         RenderSystem.enableBlend();
-        context.drawText(textRenderer, "Points: " + 6, 2, 2, 0xFFFFFFFF, true);
+        context.drawText(textRenderer, "Tokens: " + tree.points, 2, 2, 0xFFFFFFFF, true);
         startScaling(context, smoothScale);
 
         RenderSystem.setShaderColor(tree.r, tree.g, tree.b, 1);
@@ -214,11 +234,17 @@ public class AbilitySelection extends Screen
             if(tree.nodesConnected && prevNode != null)
             {
                 int nodeScale = 8;
+
+                if(prevNode.locked)
+                    RenderSystem.setShaderColor(tree.r*0.4f, tree.g*0.4f, tree.b*0.4f, 1);
+                
                 if(node.positionX != prevNode.positionX)
                     context.fill((int)node.positionX + nodeScale, (int)node.positionY + nodeScale + 1, (int)prevNode.positionX + nodeScale, (int)prevNode.positionY + nodeScale - 1, 0, 0xFFFFFFFF);
                 
                 if(node.positionY != prevNode.positionY)
                     context.fill((int)node.positionX + nodeScale + 1, (int)node.positionY + nodeScale, (int)prevNode.positionX + nodeScale - 1, (int)prevNode.positionY + nodeScale, 0, 0xFFFFFFFF);
+                
+                RenderSystem.setShaderColor(tree.r, tree.g, tree.b, 1);
             }
 
             if(node.render)
@@ -226,18 +252,21 @@ public class AbilitySelection extends Screen
                 if(screenX > node.positionX && screenX < (node.positionX + 16) && screenY > node.positionY && screenY < (node.positionY+16))
                 {
                     setTooltip(Text.of(node.description));
-                    clickAction = node.clickAction;
+                    selectedNode = node;
 
                     RenderSystem.setShaderColor(tree.r*0.6f, tree.g*0.6f, tree.b*0.6f, 1);
                 }
 
-                if(node.unlocked)
+                if(node.unlocked || node.locked)
                     RenderSystem.setShaderColor(tree.r*0.4f, tree.g*0.4f, tree.b*0.4f, 1);
                 
                 context.drawTexture(frameTex, (int)node.positionX, (int)node.positionY, 2, 0f, 0f, 16, 16, 16, 16);
                 context.drawTexture(node.texture, (int)node.positionX, (int)node.positionY, 2, 0f, 0f, 16, 16, 16, 16);
 
                 RenderSystem.setShaderColor(tree.r, tree.g, tree.b, 1);
+
+                if(node.locked)
+                    context.drawTexture(lockTex, (int)node.positionX, (int)node.positionY, 2, 0f, 0f, 16, 16, 16, 16);
 
                 i++;
             }
