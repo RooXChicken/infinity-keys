@@ -225,6 +225,7 @@ public class AbilitySelection extends Screen
         RenderSystem.setShaderColor(tree.r, tree.g, tree.b, 1);
         
         Node prevNode = null;
+        Node prevIconNode = null;
         int i = 0;
         for(Node node : tree.nodes)
         {
@@ -233,18 +234,21 @@ public class AbilitySelection extends Screen
 
             if(tree.nodesConnected && prevNode != null)
             {
-                int nodeScale = 8;
+                if(!node.skip)
+                {
+                    int nodeScale = 8;
 
-                if(prevNode.locked)
-                    RenderSystem.setShaderColor(tree.r*0.4f, tree.g*0.4f, tree.b*0.4f, 1);
-                
-                if(node.positionX != prevNode.positionX)
-                    context.fill((int)node.positionX + nodeScale, (int)node.positionY + nodeScale + 1, (int)prevNode.positionX + nodeScale, (int)prevNode.positionY + nodeScale - 1, 0, 0xFFFFFFFF);
-                
-                if(node.positionY != prevNode.positionY)
-                    context.fill((int)node.positionX + nodeScale + 1, (int)node.positionY + nodeScale, (int)prevNode.positionX + nodeScale - 1, (int)prevNode.positionY + nodeScale, 0, 0xFFFFFFFF);
-                
-                RenderSystem.setShaderColor(tree.r, tree.g, tree.b, 1);
+                    if(prevIconNode != null && !prevIconNode.unlocked)
+                        RenderSystem.setShaderColor(tree.r*0.4f, tree.g*0.4f, tree.b*0.4f, 1);
+                    
+                    if(node.positionX != prevNode.positionX)
+                        context.fill((int)node.positionX + nodeScale, (int)node.positionY + nodeScale + 1, (int)prevNode.positionX + nodeScale, (int)prevNode.positionY + nodeScale - 1, 0, 0xFFFFFFFF);
+                    
+                    if(node.positionY != prevNode.positionY)
+                        context.fill((int)node.positionX + nodeScale + 1, (int)node.positionY + nodeScale, (int)prevNode.positionX + nodeScale - 1, (int)prevNode.positionY + nodeScale, 0, 0xFFFFFFFF);
+                    
+                    RenderSystem.setShaderColor(tree.r, tree.g, tree.b, 1);
+                }
             }
 
             if(node.render)
@@ -271,7 +275,11 @@ public class AbilitySelection extends Screen
                 i++;
             }
             else if(node.texture != null)
-                context.drawTexture(node.texture, (int)node.positionX + 5, (int)node.positionY + 4, 2, 0f, 0f, 8, 8, 8, 8);
+            {
+                if(prevIconNode != null && !prevIconNode.unlocked)
+                    RenderSystem.setShaderColor(tree.r*0.4f, tree.g*0.4f, tree.b*0.4f, 1);
+                context.drawTexture(node.texture, (int)node.positionX + 4, (int)node.positionY + 4, 2, 0f, 0f, 10, 8, 10, 8);
+            }
 
             // if(prevNode != null)
             // {
@@ -305,6 +313,8 @@ public class AbilitySelection extends Screen
             //}
 
             prevNode = node;
+            if(node.clickAction != -1)
+                prevIconNode = node;
         }
 
         RenderSystem.setShaderColor(1, 1, 1, 1);

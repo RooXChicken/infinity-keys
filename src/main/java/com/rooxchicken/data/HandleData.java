@@ -68,10 +68,11 @@ public class HandleData
                     node.description = data[5];
 
                 node.render = Boolean.parseBoolean(data[6]);
-                node.unlocked = Boolean.parseBoolean(data[7]);
-                node.locked = Boolean.parseBoolean(data[8]);
+                node.skip = Boolean.parseBoolean(data[7]);
+                node.unlocked = Boolean.parseBoolean(data[8]);
+                node.locked = Boolean.parseBoolean(data[9]);
 
-                node.clickAction = Integer.parseInt(data[9]);
+                node.clickAction = Integer.parseInt(data[10]);
 
                 currentTree.nodes.add(node);
             break;
