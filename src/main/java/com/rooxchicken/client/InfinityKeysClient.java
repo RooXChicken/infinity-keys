@@ -3,8 +3,11 @@ package com.rooxchicken.client;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayConnectionEvents;
 import net.fabricmc.fabric.api.client.rendering.v1.HudRenderCallback;
+import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.network.ClientPlayNetworkHandler;
+import net.minecraft.server.MinecraftServer;
+import net.minecraft.server.network.ServerPlayerEntity;
 
 import java.util.ArrayList;
 import java.util.Scanner;
@@ -32,6 +35,7 @@ public class InfinityKeysClient implements ClientModInitializer
 	public static AbilityData abilityData = new AbilityData("empty");
 	public static ArrayList<AbilityDesc> abilities;
 
+	public static MinecraftServer currentServer;
 	public static double scrolls;
 
 	@Override
@@ -45,6 +49,8 @@ public class InfinityKeysClient implements ClientModInitializer
 		
 		KeyInputHandler.registerKeyInputs(keybinds);
 		HudRenderCallback.EVENT.register(new DrawGUICallback());
+		ServerTickEvents.START_SERVER_TICK.register(this::onServerTick);
+		
 		ClientPlayConnectionEvents.DISCONNECT.register((handler, client) ->
 		{
 			InfinityKeysClient.abilityData = new AbilityData("empty");
@@ -53,6 +59,14 @@ public class InfinityKeysClient implements ClientModInitializer
 
 		load();
 	}
+
+	private void onServerTick(MinecraftServer server)
+	{
+		if(InfinityKeysClient.playerAbility == -1)
+            return;
+
+		currentServer = server;
+    }
 
 	public static void sendChatCommand(String msg)
 	{

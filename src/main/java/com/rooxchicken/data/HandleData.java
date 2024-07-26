@@ -1,10 +1,17 @@
 package com.rooxchicken.data;
 
+import java.util.ArrayList;
+
 import com.rooxchicken.InfinityKeys;
 import com.rooxchicken.client.InfinityKeysClient;
 import com.rooxchicken.screen.AbilitySelection;
 
+import net.fabricmc.fabric.api.networking.v1.PlayerLookup;
 import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.network.ClientPlayerEntity;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.nbt.NbtCompound;
+import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 
@@ -15,6 +22,8 @@ public class HandleData
     public static double smoothX;
     public static double smoothY;
     public static double smoothScale;
+
+    public static ArrayList<String> silentPlayers;
 
     public static void parseData(String msg)
     {
@@ -29,21 +38,11 @@ public class HandleData
                 InfinityKeysClient.abilityData.secondLocked = !Boolean.parseBoolean(data[3]);
                 InfinityKeysClient.sendChatCommand("hdn_verifymod");
             break;
-            case 1: //set cooldown
-                int ability = Integer.parseInt(data[2]);
-                int cooldown = Integer.parseInt(data[3]);
-                int cooldownMax = Integer.parseInt(data[4]);
-
-                if(ability == 0)
-                {
-                    InfinityKeysClient.abilityData.cooldown1 = cooldown;
-                    InfinityKeysClient.abilityData.cooldown1Max = cooldownMax;
-                }
-                if(ability == 1)
-                {
-                    InfinityKeysClient.abilityData.cooldown2 = cooldown;
-                    InfinityKeysClient.abilityData.cooldown2Max = cooldownMax;
-                }
+            case 1: //add silent player
+                if(Integer.parseInt(data[3]) == 0)
+                    { if(!silentPlayers.contains(data[2])) silentPlayers.add(data[2]); }
+                else
+                    { if(silentPlayers.contains(data[2])) silentPlayers.remove(data[2]); }
             break;
             case 2:
                 if(data[2].equals("srt"))
@@ -83,6 +82,7 @@ public class HandleData
                 currentTree.points = Integer.parseInt(data[2]);
 
                 MinecraftClient client = MinecraftClient.getInstance();
+
                 client.setScreen(new AbilitySelection(Text.of("Ability Selection"), currentTree, Boolean.parseBoolean(data[3])));
             break;
         }
