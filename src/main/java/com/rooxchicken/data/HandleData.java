@@ -23,7 +23,7 @@ public class HandleData
     public static double smoothY;
     public static double smoothScale;
 
-    public static ArrayList<String> silentPlayers;
+    public static ArrayList<String> silentPlayers = new ArrayList<String>();
 
     public static void parseData(String msg)
     {
