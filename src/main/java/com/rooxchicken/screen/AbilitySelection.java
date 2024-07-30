@@ -209,7 +209,7 @@ public class AbilitySelection extends Screen
         mouseY = _mouseY;
         MinecraftClient client = MinecraftClient.getInstance();
         TextRenderer textRenderer = client.textRenderer;
-		this.renderBackground(context);
+		this.renderBackground(context, _mouseX, _mouseY, delta);
 
         double screenX = mouseX/smoothScale - offsetX + 1;
         double screenY = mouseY/smoothScale - offsetY + 1;
@@ -285,37 +285,6 @@ public class AbilitySelection extends Screen
                 RenderSystem.enableBlend();
                 context.drawTexture(node.texture, (int)(node.positionX), (int)(node.positionY), 2, 0f, 0f, 120, 90, 120, 90);
             }
-
-            // if(prevNode != null)
-            // {
-                // Tessellator tessellator = RenderSystem.renderThreadTesselator();
-                // RenderSystem.setShader(GameRenderer::getPositionProgram);
-                
-                // BufferBuilder bufferBuilder = tessellator.getBuffer();
-                // bufferBuilder.begin(VertexFormat.DrawMode.DEBUG_LINES, VertexFormats.POSITION);
-
-                // bufferBuilder.vertex((node.positionX + offsetX) * smoothScale + nodeScale, (node.positionY + offsetY) * smoothScale + nodeScale, -1).next();
-                // bufferBuilder.vertex((prevNode.positionX + offsetX) * smoothScale + nodeScale, (prevNode.positionY + offsetY) * smoothScale + nodeScale, -1).next();
-
-                // if(node.positionX != prevNode.positionX)
-                // {
-                //     bufferBuilder.vertex((node.positionX + offsetX) * smoothScale + nodeScale, (node.positionY + offsetY + 0.1) * smoothScale + nodeScale, -1).next();
-                //     bufferBuilder.vertex((prevNode.positionX + offsetX) * smoothScale + nodeScale, (prevNode.positionY + offsetY + 0.1) * smoothScale + nodeScale, -1).next();
-                //     bufferBuilder.vertex((node.positionX + offsetX) * smoothScale + nodeScale, (node.positionY + offsetY - 0.1) * smoothScale + nodeScale, -1).next();
-                //     bufferBuilder.vertex((prevNode.positionX + offsetX) * smoothScale + nodeScale, (prevNode.positionY + offsetY - 0.1) * smoothScale + nodeScale, -1).next();
-                // }
-
-                // if(node.positionY != prevNode.positionY)
-                // {
-                //     bufferBuilder.vertex((node.positionX + offsetX + 0.1) * smoothScale + nodeScale, (node.positionY + offsetY) * smoothScale + nodeScale, -1).next();
-                //     bufferBuilder.vertex((prevNode.positionX + offsetX + 0.1) * smoothScale + nodeScale, (prevNode.positionY + offsetY) * smoothScale + nodeScale, -1).next();
-                //     bufferBuilder.vertex((node.positionX + offsetX - 0.1) * smoothScale + nodeScale, (node.positionY + offsetY) * smoothScale + nodeScale, -1).next();
-                //     bufferBuilder.vertex((prevNode.positionX + offsetX - 0.1) * smoothScale + nodeScale, (prevNode.positionY + offsetY) * smoothScale + nodeScale, -1).next();
-                // }
-
-                // tessellator.draw();
-                // bufferBuilder.clear();
-            //}
 
             prevNode = node;
             if(node.clickAction != -1)
