@@ -274,11 +274,18 @@ public class AbilitySelection extends Screen
 
                 i++;
             }
-            else if(node.texture != null)
+            else if(node.texture != null && !node.description.equals("heart"))
             {
                 if(prevIconNode != null && !prevIconNode.unlocked)
                     RenderSystem.setShaderColor(tree.r*0.4f, tree.g*0.4f, tree.b*0.4f, 1);
                 context.drawTexture(node.texture, (int)node.positionX + 4, (int)node.positionY + 4, 2, 0f, 0f, 10, 8, 10, 8);
+                RenderSystem.setShaderColor(tree.r, tree.g, tree.b, 1);
+            }
+
+            if(node.description.equals("heart"))
+            {
+                RenderSystem.enableBlend();
+                context.drawTexture(node.texture, (int)(node.positionX), (int)(node.positionY), 2, 0f, 0f, 120, 90, 120, 90);
             }
 
             // if(prevNode != null)
