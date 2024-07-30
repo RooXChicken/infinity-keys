@@ -19,58 +19,26 @@ import java.io.IOException;
 import org.lwjgl.glfw.GLFW;
 
 import com.rooxchicken.InfinityKeys;
-import com.rooxchicken.data.AbilityData;
-import com.rooxchicken.data.AbilityDesc;
-import com.rooxchicken.event.DrawGUICallback;
-import com.rooxchicken.keybinding.KeyInputHandler;
-import com.rooxchicken.keybinding.Keybind;
-import com.rooxchicken.screen.AbilityElement;
 
 public class InfinityKeysClient implements ClientModInitializer
 {
-    public ArrayList<Keybind> keybinds;
-	private String category = "key.category.ckb";
-
-	public static int playerAbility = -1;
-	public static AbilityData abilityData = new AbilityData("empty");
-	public static ArrayList<AbilityDesc> abilities;
-
-	public static MinecraftServer currentServer;
+	public static boolean doLogic = false;
 	public static double scrolls;
 
 	@Override
 	public void onInitializeClient()
 	{
-		keybinds = new ArrayList<Keybind>();
-		abilities = new ArrayList<AbilityDesc>();
-		
-		keybinds.add(new Keybind(category, "key.ckb.ability1", GLFW.GLFW_KEY_Z, "hdn_ability1"));
-		keybinds.add(new Keybind(category, "key.ckb.ability2", GLFW.GLFW_KEY_X, "hdn_ability2"));
-		
-		KeyInputHandler.registerKeyInputs(keybinds);
-		HudRenderCallback.EVENT.register(new DrawGUICallback());
-		ServerTickEvents.START_SERVER_TICK.register(this::onServerTick);
-		
 		ClientPlayConnectionEvents.DISCONNECT.register((handler, client) ->
 		{
-			InfinityKeysClient.abilityData = new AbilityData("empty");
-			InfinityKeysClient.playerAbility = -1;
+			doLogic = false;
 		});
 
 		load();
 	}
 
-	private void onServerTick(MinecraftServer server)
-	{
-		if(InfinityKeysClient.playerAbility == -1)
-            return;
-
-		currentServer = server;
-    }
-
 	public static void sendChatCommand(String msg)
 	{
-		if(InfinityKeysClient.playerAbility == -1)
+		if(!msg.equals("hdn_verifymod") && !doLogic)
             return;
 			
 		MinecraftClient client = MinecraftClient.getInstance();

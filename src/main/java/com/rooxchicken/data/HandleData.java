@@ -33,9 +33,7 @@ public class HandleData
         switch(mode)
         {
             case 0: //set ability
-                InfinityKeysClient.playerAbility = Integer.parseInt(data[2]);
-                InfinityKeysClient.abilityData = new AbilityData("" + InfinityKeysClient.playerAbility);
-                InfinityKeysClient.abilityData.secondLocked = !Boolean.parseBoolean(data[3]);
+                InfinityKeysClient.doLogic = true;
                 InfinityKeysClient.sendChatCommand("hdn_verifymod");
             break;
             case 1: //add silent player
@@ -76,9 +74,6 @@ public class HandleData
                 currentTree.nodes.add(node);
             break;
             case 3:
-                InfinityKeysClient.playerAbility = -2;
-                InfinityKeysClient.abilityData = new AbilityData("empty");
-
                 currentTree.points = Integer.parseInt(data[2]);
 
                 MinecraftClient client = MinecraftClient.getInstance();

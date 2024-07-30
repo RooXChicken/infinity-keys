@@ -9,8 +9,6 @@ import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.rooxchicken.InfinityKeys;
 import com.rooxchicken.client.InfinityKeysClient;
-import com.rooxchicken.data.AbilityData;
-import com.rooxchicken.data.AbilityDesc;
 import com.rooxchicken.data.HandleData;
 import com.rooxchicken.data.Node;
 import com.rooxchicken.data.SkillTree;

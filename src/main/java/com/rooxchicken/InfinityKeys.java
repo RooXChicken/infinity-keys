@@ -19,6 +19,6 @@ public class InfinityKeys implements ModInitializer
 		// However, some things (like resources) may still be uninitialized.
 		// Proceed with mild caution.
 
-		LOGGER.info("1987 custom keybinds supported! (made by roo)");
+		LOGGER.info("Infinity (up to 1987) (made by roo)");
 	}
 }

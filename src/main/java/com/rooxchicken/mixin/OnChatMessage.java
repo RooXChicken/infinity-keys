@@ -7,7 +7,6 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import com.mojang.authlib.GameProfile;
 import com.rooxchicken.client.InfinityKeysClient;
-import com.rooxchicken.data.AbilityData;
 import com.rooxchicken.data.HandleData;
 
 import net.minecraft.client.network.message.MessageHandler;
