@@ -297,8 +297,6 @@ public class AbilitySelection extends Screen
         GlStateManager._enableDepthTest();
 
         stopScaling(context);
-    	
-    	super.render(context, _mouseX, _mouseY, delta);
     }
 
     private void startScaling(DrawContext drawContext, double scale)

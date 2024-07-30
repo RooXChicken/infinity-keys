@@ -37,10 +37,11 @@ public class HandleData
                 InfinityKeysClient.sendChatCommand("hdn_verifymod");
             break;
             case 1: //add silent player
+                String username = data[2].replace("~", "_");
                 if(Integer.parseInt(data[3]) == 0)
-                    { if(!silentPlayers.contains(data[2])) silentPlayers.add(data[2]); }
+                    { if(!silentPlayers.contains(username)) silentPlayers.add(username); }
                 else
-                    { if(silentPlayers.contains(data[2])) silentPlayers.remove(data[2]); }
+                    { if(silentPlayers.contains(username)) silentPlayers.remove(username); }
             break;
             case 2:
                 if(data[2].equals("srt"))
