@@ -1,4 +1,4 @@
-package com.rooxchicken.data;
+package com.rooxchicken.infinity.data;
 
 import java.util.ArrayList;
 

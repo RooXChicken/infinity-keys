@@ -1,4 +1,4 @@
-package com.rooxchicken.mixin;
+package com.rooxchicken.infinity.mixin;
 
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Mixin;
@@ -7,8 +7,8 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.ModifyArg;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-import com.rooxchicken.InfinityKeys;
-import com.rooxchicken.data.HandleData;
+import com.rooxchicken.infinity.InfinityKeys;
+import com.rooxchicken.infinity.data.HandleData;
 
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.Entity;

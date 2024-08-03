@@ -12,10 +12,10 @@
 	"environment": "*",
 	"entrypoints": {
 		"main": [
-			"com.rooxchicken.InfinityKeys"
+			"com.rooxchicken.infinity.InfinityKeys"
 		],
 		"client": [
-			"com.rooxchicken.client.InfinityKeysClient"
+			"com.rooxchicken.infinity.client.InfinityKeysClient"
 		]
 	},
 	"mixins": [

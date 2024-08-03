@@ -1,10 +1,10 @@
-package com.rooxchicken.data;
+package com.rooxchicken.infinity.data;
 
 import java.util.ArrayList;
 
-import com.rooxchicken.InfinityKeys;
-import com.rooxchicken.client.InfinityKeysClient;
-import com.rooxchicken.screen.AbilitySelection;
+import com.rooxchicken.infinity.InfinityKeys;
+import com.rooxchicken.infinity.client.InfinityKeysClient;
+import com.rooxchicken.infinity.screen.AbilitySelection;
 
 import net.fabricmc.fabric.api.networking.v1.PlayerLookup;
 import net.minecraft.client.MinecraftClient;

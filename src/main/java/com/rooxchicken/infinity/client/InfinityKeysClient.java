@@ -1,4 +1,4 @@
-package com.rooxchicken.client;
+package com.rooxchicken.infinity.client;
 
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayConnectionEvents;
@@ -18,7 +18,7 @@ import java.io.IOException;
 
 import org.lwjgl.glfw.GLFW;
 
-import com.rooxchicken.InfinityKeys;
+import com.rooxchicken.infinity.InfinityKeys;
 
 public class InfinityKeysClient implements ClientModInitializer
 {

@@ -1,4 +1,4 @@
-package com.rooxchicken.screen;
+package com.rooxchicken.infinity.screen;
 
 import java.util.ArrayList;
 
@@ -7,12 +7,12 @@ import org.lwjgl.opengl.GL11;
 
 import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.systems.RenderSystem;
-import com.rooxchicken.InfinityKeys;
-import com.rooxchicken.client.InfinityKeysClient;
-import com.rooxchicken.data.HandleData;
-import com.rooxchicken.data.Node;
-import com.rooxchicken.data.SkillTree;
-import com.rooxchicken.mixin.MixinScrolls;
+import com.rooxchicken.infinity.InfinityKeys;
+import com.rooxchicken.infinity.client.InfinityKeysClient;
+import com.rooxchicken.infinity.data.HandleData;
+import com.rooxchicken.infinity.data.Node;
+import com.rooxchicken.infinity.data.SkillTree;
+import com.rooxchicken.infinity.mixin.MixinScrolls;
 
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.font.TextRenderer;

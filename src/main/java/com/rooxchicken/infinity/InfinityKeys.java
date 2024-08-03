@@ -1,4 +1,4 @@
-package com.rooxchicken;
+package com.rooxchicken.infinity;
 
 import net.fabricmc.api.ModInitializer;
 

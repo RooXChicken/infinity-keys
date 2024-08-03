@@ -1,4 +1,4 @@
-package com.rooxchicken.mixin;
+package com.rooxchicken.infinity.mixin;
 
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.gen.Invoker;
@@ -6,7 +6,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-import com.rooxchicken.client.InfinityKeysClient;
+import com.rooxchicken.infinity.client.InfinityKeysClient;
 
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.Mouse;

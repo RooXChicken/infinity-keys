@@ -1,9 +1,9 @@
 {
 	"required": true,
-	"package": "com.rooxchicken.mixin",
+	"package": "com.rooxchicken.infinity.mixin",
 	"compatibilityLevel": "JAVA_21",
 	"mixins": [
-		"OnChatMessage",
+		"OnChatMessageInfinity",
 		"MixinScrolls",
 		"MakePlayerSilent"
 	],
